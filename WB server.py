@@ -9,20 +9,7 @@ async def echo(websocket, path):
 
     message = await websocket.recv()
     print(message)
-    # Clicking Button by CSS selector
-    await websocket.send(json.dumps({
-        "action": "clickButton_byCSS",
-        "payload": {}
-    }))
 
-    time.sleep(7)
-
-    await websocket.send(json.dumps({
-        "action": "clickButton_byXpath",
-        "payload": {}
-    }))
-
-    time.sleep(7)
 
     # Getting HTMl Page
     await websocket.send(json.dumps({
@@ -32,20 +19,54 @@ async def echo(websocket, path):
 
     # Get the HTML content from the client
     html = await websocket.recv()
-    print(html)
+    #print(html)
     # Save the HTML content to a file
     with open('page.html', 'wb') as f:
         f.write(html.encode('utf-8'))
 
-    time.sleep(10)
+    
+    time.sleep(5)
+    # Clicking Button by CSS selector
+    await websocket.send(json.dumps({
+        "action": "clickButtonByCSS",
+        "payload": {}
+    }))
+    message = await websocket.recv()
+    print(message)
 
+    
+    time.sleep(5)
+    # Clicking Button by Xpath selector
+    await websocket.send(json.dumps({
+        "action": "clickButtonByXpath",
+        "payload": {}
+    }))
+    message = await websocket.recv()
+    print(message)
+
+    
+    time.sleep(5)
+    # Getting HTML Content by CSS selector
+    await websocket.send(json.dumps({
+        "action": "getHtmlContentByCssSelector",
+        "payload": {}
+    }))
+    
+    # Getting the HTML content from the client
+    html_css = await websocket.recv()
+
+    # Save the HTML content to a file
+    with open('HTML_content_Css.html', 'wb') as f:
+        f.write(html_css.encode('utf-8'))
+
+    time.sleep(5)
     # Performing bet
     await websocket.send(json.dumps({
         "action": "placeBet",
         "payload": {}
     }))
-
-
+    message = await websocket.recv()
+    print(message)
 
 
 async def start_server():

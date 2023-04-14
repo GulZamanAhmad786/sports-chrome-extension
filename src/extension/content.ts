@@ -65,6 +65,19 @@ async function clickButtonByXpath() {
   }
 }
 
+async function getHtmlContentByCssSelector() {
+  const css_selector = 'div[id=main]> div> div:nth-child(2) > div:nth-child(2) > div:nth-child(3)'
+  const element = document.querySelector(css_selector);
+  if (element) {
+    const html = element.outerHTML;
+    return html;
+  } else {
+    console.error(`No element found with selector: ${css_selector}`);
+    return null;
+  }
+}
+// 
+
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   console.log("listener")
@@ -79,16 +92,20 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     chrome.runtime.sendMessage({ action: 'sendMessage', message: 'Done Placebet' }); 
   }
 
-  if (request.action === 'clickButton_byCSS') {
+  if (request.action === 'clickButtonByCSS') {
     await clickButtonByCssSelector();
     chrome.runtime.sendMessage({ action: 'sendMessage', message: 'Button clicked by CSS!' }); 
   }
   
-  if (request.action === 'clickButton_byXpath') {
+  if (request.action === 'clickButtonByXpath') {
     await clickButtonByXpath();
     chrome.runtime.sendMessage({ action: 'sendMessage', message: 'Button clicked by Xpath!' }); 
   }
-
+  
+  if (request.action === 'getHtmlContentByCssSelector') {
+    const html = await getHtmlContentByCssSelector();
+    chrome.runtime.sendMessage({ action: 'sendMessage', message: html });
+  }
   // click button by css selector
   // click button by xpath
   // get html by css selector
